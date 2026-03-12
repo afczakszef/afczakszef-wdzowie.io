@@ -3,118 +3,140 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Strona AFC Zakszef</title>
+<title>afczakszef_yt</title>
 <style>
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        margin: 0;
-        padding: 0;
-        background: #1a1a1a;
-        color: #fff;
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-    }
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+background:#0f172a;
+color:white;
+}
 
-    header {
-        background: #ff0000;
-        padding: 20px;
-        text-align: center;
-    }
+header{
+text-align:center;
+padding:40px 20px;
+}
 
-    header h1 {
-        margin: 0;
-        font-size: 2em;
-    }
+h1{font-size:40px;margin:0}
 
-    .links {
-        margin-top: 10px;
-    }
+.container{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:30px;
+padding:30px;
+max-width:1100px;
+margin:auto;
+}
 
-    .links a {
-        color: #fff;
-        text-decoration: none;
-        margin: 0 10px;
-        font-weight: bold;
-        transition: color 0.3s;
-    }
+.card{
+background:#1e293b;
+padding:25px;
+border-radius:20px;
+box-shadow:0 10px 25px rgba(0,0,0,0.4);
+}
 
-    .links a:hover {
-        color: #ffd700;
-    }
+.btn{
+display:inline-block;
+margin-top:15px;
+padding:12px 22px;
+background:#5865F2;
+border-radius:10px;
+color:white;
+text-decoration:none;
+font-weight:bold;
+}
 
-    .subscriber-count {
-        margin-top: 10px;
-        font-size: 1.2em;
-    }
+#videos{
+max-width:1100px;
+margin:auto;
+padding:20px;
+}
 
-    main {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 50px 20px;
-        text-align: center;
-    }
+.video{
+background:#1e293b;
+padding:15px;
+margin-bottom:15px;
+border-radius:15px;
+}
 
-    footer {
-        background: #333;
-        padding: 20px;
-        text-align: center;
-        font-size: 1.1em;
-    }
+iframe{max-width:100%}
 
-    .episode {
-        margin-top: 10px;
-        font-weight: bold;
-        color: #ffd700;
-    }
+footer{
+text-align:center;
+padding:30px;
+opacity:0.7;
+}
 </style>
 </head>
 <body>
-    <header>
-        <h1>AFC Zakszef</h1>
-        <div class="links">
-            <a href="https://youtube.com/@afczakszef_1?si=nncYl0Hn-ddnwyZH" target="_blank">Mój YouTube</a>
-            <a href="https://discord.gg/VkQJNQBe" target="_blank">Discord</a>
-        </div>
-        <div class="subscriber-count" id="subCount">Subskrybenci: 0</div>
-    </header>
 
-    <main>
-        <div>
-            <h2>Witaj na mojej stronie!</h2>
-            <p>Tu znajdziesz najnowsze odcinki i aktualności.</p>
-        </div>
-    </main>
+<header>
+<h1>AFCZAKSZEF YT</h1>
+<p>Oficjalna strona mojego kanału</p>
+</header>
 
-    <footer>
-        Nowy odcinek: <span class="episode" id="latestEpisode">Jeszcze nie dodano</span>
-    </footer>
+<div class="container">
+
+<div class="card">
+<h2>Discord</h2>
+<p>Dołącz do mojego serwera</p>
+<a class="btn" href="https://discord.gg/XWQGd4zY" target="_blank">Wejdź na Discord</a>
+</div>
+
+<div class="card">
+<h2>Mój kanał YouTube</h2>
+<p>Subskrybuj mój kanał</p>
+
+<iframe src="https://livecounts.io/embed/youtube-live-subscriber-counter/UC" width="100%" height="120"></iframe>
+
+<a class="btn" href="https://youtube.com/@afczakszef_1" target="_blank">Otwórz kanał</a>
+</div>
+
+</div>
+
+<section id="videos">
+<h2>Najnowsze odcinki</h2>
+<div id="videoList"></div>
+</section>
+
+<footer>
+afczakszef_yt © 2026
+</footer>
 
 <script>
-    // --- Licznik subów YouTube ---
-    const apiKey = "TUTAJ_WSTAW_SWÓJ_API_KEY";
-    const channelId = "UCN6V5qEv4f1WmHh9yM1ZyPQ"; // Twój channel ID
-    async function fetchSubs() {
-        try {
-            const response = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${channelId}&key=${apiKey}`);
-            const data = await response.json();
-            const count = data.items[0].statistics.subscriberCount;
-            document.getElementById("subCount").textContent = `Subskrybenci: ${count}`;
-        } catch (error) {
-            console.error(error);
-        }
-    }
-    fetchSubs();
+const channelId = "UC"; // tu można wstawić ID kanału jeśli będziesz chciał
 
-    // --- Aktualizacja odcinka ---
-    function updateEpisode(title) {
-        document.getElementById("latestEpisode").textContent = title;
-    }
+const rssUrl = "https://api.rss2json.com/v1/api.json?rss_url=https://www.youtube.com/feeds/videos.xml?channel_id=" + channelId;
 
-    // Przykład: gdy wstawisz nowy odcinek
-    updateEpisode("Odcinek 1: Start serii!");
+fetch(rssUrl)
+.then(res => res.json())
+.then(data => {
+const container = document.getElementById("videoList");
+
+let count = 0;
+
+for(const item of data.items){
+
+if(count >= 5) break;
+
+if(item.title.toLowerCase().includes("short")) continue;
+
+const videoId = item.link.split("v=")[1];
+
+const div = document.createElement("div");
+div.className = "video";
+
+div.innerHTML = `
+<h3>${item.title}</h3>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
+`;
+
+container.appendChild(div);
+count++;
+}
+});
 </script>
+
 </body>
 </html>
+
