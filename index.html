@@ -1,142 +1,138 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>afczakszef_yt</title>
-<style>
-body{
-margin:0;
-font-family:Arial, Helvetica, sans-serif;
-background:#0f172a;
-color:white;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moja Strona</title>
+    <style>
+        /* Ogólne tło gradientowe */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1f1c2c, #928dab);
+            color: #fff;
+            text-align: center;
+            padding: 50px 20px;
+            min-height: 100vh;
+        }
 
-header{
-text-align:center;
-padding:40px 20px;
-}
+        h1 {
+            color: #f39c12;
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+            animation: fadeIn 1.5s ease-in-out;
+        }
 
-h1{font-size:40px;margin:0}
+        h2 {
+            margin-top: 40px;
+            color: #ffd700;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
 
-.container{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:30px;
-padding:30px;
-max-width:1100px;
-margin:auto;
-}
+        /* Styl linków */
+        .links a {
+            display: inline-block;
+            margin: 15px;
+            padding: 15px 30px;
+            background: linear-gradient(45deg, #7289da, #99a9f0);
+            color: white;
+            text-decoration: none;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 1.1em;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
 
-.card{
-background:#1e293b;
-padding:25px;
-border-radius:20px;
-box-shadow:0 10px 25px rgba(0,0,0,0.4);
-}
+        .links a.youtube {
+            background: linear-gradient(45deg, #FF0000, #FF4C4C);
+        }
 
-.btn{
-display:inline-block;
-margin-top:15px;
-padding:12px 22px;
-background:#5865F2;
-border-radius:10px;
-color:white;
-text-decoration:none;
-font-weight:bold;
-}
+        .links a:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            opacity: 0.9;
+        }
 
-#videos{
-max-width:1100px;
-margin:auto;
-padding:20px;
-}
+        /* Kontener wideo */
+        .video-container {
+            margin-top: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-.video{
-background:#1e293b;
-padding:15px;
-margin-bottom:15px;
-border-radius:15px;
-}
+        iframe {
+            border: none;
+            width: 100%;
+            max-width: 640px;
+            height: 360px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease;
+        }
 
-iframe{max-width:100%}
+        iframe:hover {
+            transform: scale(1.02);
+        }
 
-footer{
-text-align:center;
-padding:30px;
-opacity:0.7;
-}
-</style>
+        /* Animacja nagłówka */
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(-20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+
+        /* Responsywność */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2em;
+            }
+            iframe {
+                height: 200px;
+            }
+            .links a {
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<header>
-<h1>AFCZAKSZEF YT</h1>
-<p>Oficjalna strona mojego kanału</p>
-</header>
+    <h1>Witaj na mojej stronie!</h1>
 
-<div class="container">
+    <div class="links">
+        <a href="https://discord.gg/VkQJNQBe" target="_blank">Dołącz do Discorda</a>
+        <a href="https://youtube.com/@afczakszef_1?si=pRBKA7ADILNb2tJ_" target="_blank" class="youtube">Mój YouTube</a>
+    </div>
 
-<div class="card">
-<h2>Discord</h2>
-<p>Dołącz do mojego serwera</p>
-<a class="btn" href="https://discord.gg/XWQGd4zY" target="_blank">Wejdź na Discord</a>
-</div>
+    <div class="video-container">
+        <h2>Najnowszy odcinek:</h2>
+        <iframe id="latest-video" src="" allowfullscreen></iframe>
+    </div>
 
-<div class="card">
-<h2>Mój kanał YouTube</h2>
-<p>Subskrybuj mój kanał</p>
+    <script>
+        const channelId = "UCXXXXXXX"; // <- Wstaw prawdziwe ID kanału
+        const apiKey = "TU_WSTAW_SWÓJ_API_KEY_YOUTUBE"; // <- Wstaw swój API Key
 
-<iframe src="https://livecounts.io/embed/youtube-live-subscriber-counter/UC" width="100%" height="120"></iframe>
+        async function loadLatestVideo() {
+            try {
+                const response = await fetch(`https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&order=date&part=snippet&type=video&maxResults=1`);
+                const data = await response.json();
 
-<a class="btn" href="https://youtube.com/@afczakszef_1" target="_blank">Otwórz kanał</a>
-</div>
+                if(data.items && data.items.length > 0) {
+                    const videoId = data.items[0].id.videoId;
+                    document.getElementById("latest-video").src = `https://www.youtube.com/embed/${videoId}`;
+                } else {
+                    console.error("Nie znaleziono filmów na kanale.");
+                }
+            } catch (err) {
+                console.error("Błąd ładowania filmu:", err);
+            }
+        }
 
-</div>
-
-<section id="videos">
-<h2>Najnowsze odcinki</h2>
-<div id="videoList"></div>
-</section>
-
-<footer>
-afczakszef_yt © 2026
-</footer>
-
-<script>
-const channelId = "UC"; // tu można wstawić ID kanału jeśli będziesz chciał
-
-const rssUrl = "https://api.rss2json.com/v1/api.json?rss_url=https://www.youtube.com/feeds/videos.xml?channel_id=" + channelId;
-
-fetch(rssUrl)
-.then(res => res.json())
-.then(data => {
-const container = document.getElementById("videoList");
-
-let count = 0;
-
-for(const item of data.items){
-
-if(count >= 5) break;
-
-if(item.title.toLowerCase().includes("short")) continue;
-
-const videoId = item.link.split("v=")[1];
-
-const div = document.createElement("div");
-div.className = "video";
-
-div.innerHTML = `
-<h3>${item.title}</h3>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
-`;
-
-container.appendChild(div);
-count++;
-}
-});
-</script>
+        loadLatestVideo();
+    </script>
 
 </body>
 </html>
-index.html
